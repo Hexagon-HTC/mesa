@@ -1376,12 +1376,7 @@ else
   dep_clock = cc.find_library('rt')
 endif
 
-dep_zlib = dependency('zlib', version : '>= 1.2.3',
-                      fallback : ['zlib', 'zlib_dep'],
-                      required : get_option('zlib'))
-if dep_zlib.found()
-  pre_args += '-DHAVE_ZLIB'
-endif
+dep_zlib = null_dep
 
 _zstd = get_option('zstd')
 if _zstd == 'true'
@@ -1420,7 +1415,7 @@ if dep_thread.found() and host_machine.system() != 'windows'
 endif
 if host_machine.system() == 'darwin'
   dep_expat = meson.get_compiler('c').find_library('expat')
-elif host_machine.system() != 'windows'
+elif host_machine.system() != 'windows' and host_machine.system() != 'android'
   dep_expat = dependency('expat', fallback : ['expat', 'expat_dep'],
                          required: not with_platform_android or with_any_intel)
 else
